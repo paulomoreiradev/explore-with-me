@@ -80,7 +80,7 @@ const Dashboard = () => {
             {["🌊 Praias", "🏔️ Montanhas", "🍴 Gastronomia", "🎭 Cultura"].map((tag) => (
               <Badge
                 key={tag}
-                className="cursor-pointer whitespace-nowrap bg-white/20 px-4 py-2 text-white backdrop-blur-sm hover:bg-white/30"
+                className="cursor-pointer whitespace-nowrap bg-white px-4 py-2 text-primary shadow-md hover:shadow-lg hover:scale-105 transition-all"
               >
                 {tag}
               </Badge>
