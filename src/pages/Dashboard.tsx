@@ -68,8 +68,8 @@ const Dashboard = () => {
               <h1 className="mb-2 text-4xl font-bold text-white">Vai Por Mim</h1>
               <p className="text-lg text-white/90">Descubra experiências autênticas ✨</p>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-white hover:bg-white/20">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 text-lg font-bold backdrop-blur-sm">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="hover:bg-white/20">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary text-lg font-bold shadow-lg">
                 U
               </div>
             </Button>
