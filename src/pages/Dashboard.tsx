@@ -165,16 +165,42 @@ const Dashboard = () => {
               Ver mais
             </Button>
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-2">
-            {["São Paulo", "Rio de Janeiro", "Salvador", "Florianópolis"].map((city) => (
-              <Badge
-                key={city}
-                variant="outline"
-                className="cursor-pointer whitespace-nowrap px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-colors"
-                onClick={() => navigate(`/explore?city=${encodeURIComponent(city)}`)}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              { 
+                name: "São Paulo", 
+                image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop"
+              },
+              { 
+                name: "Rio de Janeiro", 
+                image: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=400&h=300&fit=crop"
+              },
+              { 
+                name: "Salvador", 
+                image: "https://images.unsplash.com/photo-1591634616938-1dfa7ee2e617?w=400&h=300&fit=crop"
+              },
+              { 
+                name: "Florianópolis", 
+                image: "https://images.unsplash.com/photo-1626287991587-f0ea2dcbc45b?w=400&h=300&fit=crop"
+              }
+            ].map((city) => (
+              <Card 
+                key={city.name} 
+                className="cursor-pointer overflow-hidden border-2 border-transparent transition-all hover:border-primary hover:shadow-lg"
+                onClick={() => navigate(`/explore?city=${encodeURIComponent(city.name)}`)}
               >
-                {city}
-              </Badge>
+                <div className="relative h-32">
+                  <img 
+                    src={city.image} 
+                    alt={city.name}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <h3 className="absolute bottom-3 left-3 text-lg font-bold text-white">
+                    {city.name}
+                  </h3>
+                </div>
+              </Card>
             ))}
           </div>
         </section>
