@@ -161,7 +161,18 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold">Perto de Você</h2>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2">
-            {["São Paulo", "Rio de Janeiro", "Salvador", "Florianópolis"].map((city) => (
+            {[
+              "São Paulo", 
+              "Rio de Janeiro", 
+              "Salvador", 
+              "Florianópolis", 
+              "Belo Horizonte", 
+              "Curitiba", 
+              "Porto Alegre", 
+              "Recife", 
+              "Fortaleza", 
+              "Brasília"
+            ].map((city) => (
               <Badge
                 key={city}
                 variant="outline"
