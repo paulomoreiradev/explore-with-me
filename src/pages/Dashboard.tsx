@@ -63,7 +63,7 @@ const Dashboard = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&h=600&fit=crop')] bg-cover bg-center opacity-[0.08]" />
         <div className="container relative mx-auto px-4 py-12">
-          <div className="mb-6 flex items-start justify-between max-w-2xl">
+          <div className="mb-6 flex items-start justify-between max-w-4xl mx-auto">
             <div>
               <h1 className="mb-2 text-4xl font-bold text-white">Vai Por Mim</h1>
               <p className="text-lg text-white/90">Descubra experiências autênticas ✨</p>
@@ -75,7 +75,7 @@ const Dashboard = () => {
             </Button>
           </div>
 
-          <div className="relative max-w-2xl">
+          <div className="relative max-w-4xl mx-auto">
             <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
             <Input
               placeholder="Para onde você quer ir?"
@@ -83,7 +83,7 @@ const Dashboard = () => {
             />
           </div>
 
-          <div className="mt-6 flex gap-3 overflow-x-auto pb-2 max-w-2xl">
+          <div className="mt-6 flex gap-3 overflow-x-auto pb-2 max-w-4xl mx-auto">
             {["🌊 Praias", "🏔️ Montanhas", "🍴 Gastronomia", "🎭 Cultura"].map((tag) => (
               <Badge
                 key={tag}
