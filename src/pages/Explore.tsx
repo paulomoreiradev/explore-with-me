@@ -3,13 +3,7 @@ import { Filter, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ExperienceCard from "@/components/ExperienceCard";
 import BottomNav from "@/components/BottomNav";
 import { useNavigate } from "react-router-dom";
@@ -31,8 +25,8 @@ const Explore = () => {
   const experiences = [
     {
       id: "1",
-      title: "Tour Gastronômico no Centro Histórico",
-      location: "Salvador, BA",
+      title: "Tour Gastronômico",
+      location: "Jijoca de Jericoacoara, CE",
       duration: "3 horas",
       price: 150,
       rating: 4.9,
@@ -44,7 +38,7 @@ const Explore = () => {
     {
       id: "2",
       title: "Trilha ao Pôr do Sol na Serra",
-      location: "Gramado, RS",
+      location: "Guaramiranga, CE",
       duration: "4 horas",
       price: 120,
       rating: 4.8,
@@ -55,8 +49,8 @@ const Explore = () => {
     },
     {
       id: "3",
-      title: "Aula de Samba com Passistas",
-      location: "Rio de Janeiro, RJ",
+      title: "Aula de Forró",
+      location: "Fortaleza, CE",
       duration: "2 horas",
       price: 90,
       rating: 5.0,
@@ -67,8 +61,8 @@ const Explore = () => {
     },
     {
       id: "4",
-      title: "Mergulho em Recifes de Corais",
-      location: "Porto de Galinhas, PE",
+      title: "Mergulho num Naufrago",
+      location: "Fortaleza, CE",
       duration: "5 horas",
       price: 280,
       rating: 4.9,
@@ -80,7 +74,7 @@ const Explore = () => {
     {
       id: "5",
       title: "Workshop de Cerâmica Indígena",
-      location: "Alto Paraíso, GO",
+      location: "Aquiraz, CE",
       duration: "3 horas",
       price: 110,
       rating: 4.7,
@@ -92,7 +86,7 @@ const Explore = () => {
     {
       id: "6",
       title: "Tour de Cafés Especiais",
-      location: "São Paulo, SP",
+      location: "Baturité, CE",
       duration: "2.5 horas",
       price: 95,
       rating: 4.8,
@@ -111,10 +105,7 @@ const Explore = () => {
           <h1 className="mb-4 text-2xl font-bold text-primary">Explorar Experiências</h1>
 
           <div className="flex gap-2">
-            <Input
-              placeholder="Buscar por cidade ou atividade..."
-              className="flex-1"
-            />
+            <Input placeholder="Buscar por cidade ou atividade..." className="flex-1" />
             <Button variant="outline" size="icon">
               <SlidersHorizontal className="h-5 w-5" />
             </Button>
@@ -161,17 +152,11 @@ const Explore = () => {
 
       {/* Experiences Grid */}
       <main className="container mx-auto px-4 py-6">
-        <div className="mb-4 text-sm text-muted-foreground">
-          {experiences.length} experiências encontradas
-        </div>
-        
+        <div className="mb-4 text-sm text-muted-foreground">{experiences.length} experiências encontradas</div>
+
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {experiences.map((exp) => (
-            <ExperienceCard
-              key={exp.id}
-              {...exp}
-              onClick={() => navigate(`/experience/${exp.id}`)}
-            />
+            <ExperienceCard key={exp.id} {...exp} onClick={() => navigate(`/experience/${exp.id}`)} />
           ))}
         </div>
       </main>
