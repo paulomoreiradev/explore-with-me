@@ -176,7 +176,8 @@ const Dashboard = () => {
               <Badge
                 key={city}
                 variant="outline"
-                className="cursor-pointer whitespace-nowrap px-4 py-2 hover:bg-primary hover:text-primary-foreground"
+                className="cursor-pointer whitespace-nowrap px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-colors"
+                onClick={() => navigate(`/explore?city=${encodeURIComponent(city)}`)}
               >
                 {city}
               </Badge>
