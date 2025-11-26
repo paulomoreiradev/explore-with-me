@@ -38,7 +38,7 @@ const Dashboard = () => {
     {
       id: "3",
       title: "Aula de Forró",
-      location: "Fortaleza, RJ",
+      location: "Fortaleza, CE",
       duration: "2 horas",
       price: 90,
       rating: 5.0,
