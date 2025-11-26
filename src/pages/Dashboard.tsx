@@ -156,23 +156,17 @@ const Dashboard = () => {
 
         {/* Nearby Destinations */}
         <section>
-          <div className="mb-4 flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-accent" />
-            <h2 className="text-xl font-bold">Perto de Você</h2>
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-accent" />
+              <h2 className="text-xl font-bold">Perto de Você</h2>
+            </div>
+            <Button variant="ghost" size="sm" onClick={() => navigate("/explore")}>
+              Ver mais
+            </Button>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2">
-            {[
-              "São Paulo", 
-              "Rio de Janeiro", 
-              "Salvador", 
-              "Florianópolis", 
-              "Belo Horizonte", 
-              "Curitiba", 
-              "Porto Alegre", 
-              "Recife", 
-              "Fortaleza", 
-              "Brasília"
-            ].map((city) => (
+            {["São Paulo", "Rio de Janeiro", "Salvador", "Florianópolis"].map((city) => (
               <Badge
                 key={city}
                 variant="outline"
