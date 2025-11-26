@@ -13,8 +13,8 @@ const Dashboard = () => {
   const recommendations = [
     {
       id: "1",
-      title: "Tour Gastronômico no Centro Histórico",
-      location: "Salvador, BA",
+      title: "Tour Gastronômico",
+      location: "Jijoca de Jericoacoara, CE",
       duration: "3 horas",
       price: 150,
       rating: 4.9,
@@ -26,7 +26,7 @@ const Dashboard = () => {
     {
       id: "2",
       title: "Trilha ao Pôr do Sol na Serra",
-      location: "Gramado, RS",
+      location: "Guaramiranga, CE",
       duration: "4 horas",
       price: 120,
       rating: 4.8,
@@ -37,8 +37,8 @@ const Dashboard = () => {
     },
     {
       id: "3",
-      title: "Aula de Samba com Passistas",
-      location: "Rio de Janeiro, RJ",
+      title: "Aula de Forró",
+      location: "Fortaleza, RJ",
       duration: "2 horas",
       price: 90,
       rating: 5.0,
@@ -70,10 +70,7 @@ const Dashboard = () => {
 
           <div className="relative max-w-4xl mx-auto">
             <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
-            <Input
-              placeholder="Para onde você quer ir?"
-              className="h-14 bg-white pl-12 pr-4 text-base shadow-lg"
-            />
+            <Input placeholder="Para onde você quer ir?" className="h-14 bg-white pl-12 pr-4 text-base shadow-lg" />
           </div>
 
           <div className="mt-6 flex gap-3 justify-center overflow-x-auto pb-2 max-w-4xl mx-auto">
@@ -92,7 +89,10 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-6 space-y-8">
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
-          <Card className="cursor-pointer border-2 border-transparent transition-smooth hover:border-primary hover:shadow-card" onClick={() => navigate("/itinerary")}>
+          <Card
+            className="cursor-pointer border-2 border-transparent transition-smooth hover:border-primary hover:shadow-card"
+            onClick={() => navigate("/itinerary")}
+          >
             <CardContent className="p-4">
               <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                 <Sparkles className="h-6 w-6 text-primary" />
@@ -101,8 +101,11 @@ const Dashboard = () => {
               <p className="text-xs text-muted-foreground">IA personalizada</p>
             </CardContent>
           </Card>
-          
-          <Card className="cursor-pointer border-2 border-transparent transition-smooth hover:border-primary hover:shadow-card" onClick={() => navigate("/explore")}>
+
+          <Card
+            className="cursor-pointer border-2 border-transparent transition-smooth hover:border-primary hover:shadow-card"
+            onClick={() => navigate("/explore")}
+          >
             <CardContent className="p-4">
               <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
                 <MapPin className="h-6 w-6 text-accent" />
@@ -145,11 +148,7 @@ const Dashboard = () => {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {recommendations.map((exp) => (
-              <ExperienceCard
-                key={exp.id}
-                {...exp}
-                onClick={() => navigate(`/experience/${exp.id}`)}
-              />
+              <ExperienceCard key={exp.id} {...exp} onClick={() => navigate(`/experience/${exp.id}`)} />
             ))}
           </div>
         </section>
@@ -167,38 +166,32 @@ const Dashboard = () => {
           </div>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[
-              { 
-                name: "São Paulo", 
-                image: "https://images.unsplash.com/photo-1541661538396-53ba2d051eed?w=400&h=300&fit=crop"
+              {
+                name: "São Paulo",
+                image: "https://images.unsplash.com/photo-1541661538396-53ba2d051eed?w=400&h=300&fit=crop",
               },
-              { 
-                name: "Rio de Janeiro", 
-                image: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=400&h=300&fit=crop"
+              {
+                name: "Rio de Janeiro",
+                image: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=400&h=300&fit=crop",
               },
-              { 
-                name: "Salvador", 
-                image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=400&h=300&fit=crop"
+              {
+                name: "Salvador",
+                image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=400&h=300&fit=crop",
               },
-              { 
-                name: "Fortaleza", 
-                image: "https://images.unsplash.com/photo-1595948128165-f155c4c99e38?w=400&h=300&fit=crop"
-              }
+              {
+                name: "Fortaleza",
+                image: "https://images.unsplash.com/photo-1595948128165-f155c4c99e38?w=400&h=300&fit=crop",
+              },
             ].map((city) => (
-              <Card 
-                key={city.name} 
+              <Card
+                key={city.name}
                 className="cursor-pointer overflow-hidden border-2 border-transparent transition-all hover:border-primary hover:shadow-lg"
                 onClick={() => navigate(`/explore?city=${encodeURIComponent(city.name)}`)}
               >
                 <div className="relative h-32">
-                  <img 
-                    src={city.image} 
-                    alt={city.name}
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={city.image} alt={city.name} className="h-full w-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <h3 className="absolute bottom-3 left-3 text-lg font-bold text-white">
-                    {city.name}
-                  </h3>
+                  <h3 className="absolute bottom-3 left-3 text-lg font-bold text-white">{city.name}</h3>
                 </div>
               </Card>
             ))}
