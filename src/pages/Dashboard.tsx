@@ -58,55 +58,66 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="container mx-auto px-4 py-4">
-          <div className="mb-4 flex items-center justify-between">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-hero">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&h=600&fit=crop')] bg-cover bg-center opacity-20" />
+        <div className="container relative mx-auto px-4 py-12">
+          <div className="mb-6 flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-primary">Vai Por Mim</h1>
-              <p className="text-sm text-muted-foreground">Olá, viajante! 👋</p>
+              <h1 className="mb-2 text-4xl font-bold text-white">Vai Por Mim</h1>
+              <p className="text-lg text-white/90">Descubra experiências autênticas ✨</p>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => navigate("/profile")}>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-hero text-white font-bold">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/profile")} className="text-white hover:bg-white/20">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/30 text-lg font-bold backdrop-blur-sm">
                 U
               </div>
             </Button>
           </div>
 
           <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+            <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder="Buscar destinos ou experiências..."
-              className="pl-10 pr-4"
+              placeholder="Para onde você quer ir?"
+              className="h-14 bg-white pl-12 pr-4 text-base shadow-lg"
             />
           </div>
+
+          <div className="mt-6 flex gap-3 overflow-x-auto pb-2">
+            {["🌊 Praias", "🏔️ Montanhas", "🍴 Gastronomia", "🎭 Cultura"].map((tag) => (
+              <Badge
+                key={tag}
+                className="cursor-pointer whitespace-nowrap bg-white/20 px-4 py-2 text-white backdrop-blur-sm hover:bg-white/30"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
         </div>
-      </header>
+      </section>
 
       <main className="container mx-auto px-4 py-6 space-y-8">
-        {/* AI Recommendations Banner */}
-        <Card className="bg-gradient-hero text-white shadow-hover">
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
-                <Sparkles className="h-6 w-6" />
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 gap-3">
+          <Card className="cursor-pointer border-2 border-transparent transition-smooth hover:border-primary hover:shadow-card" onClick={() => navigate("/itinerary")}>
+            <CardContent className="p-4">
+              <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Sparkles className="h-6 w-6 text-primary" />
               </div>
-              <div className="flex-1">
-                <h2 className="mb-2 text-xl font-bold">Recomendações Personalizadas</h2>
-                <p className="mb-4 text-sm text-white/90">
-                  Baseadas nos seus interesses e histórico de viagens
-                </p>
-                <Button 
-                  variant="secondary" 
-                  size="sm"
-                  onClick={() => navigate("/itinerary")}
-                >
-                  Monte seu Roteiro
-                </Button>
+              <h3 className="font-bold">Monte seu Roteiro</h3>
+              <p className="text-xs text-muted-foreground">IA personalizada</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="cursor-pointer border-2 border-transparent transition-smooth hover:border-primary hover:shadow-card" onClick={() => navigate("/explore")}>
+            <CardContent className="p-4">
+              <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
+                <MapPin className="h-6 w-6 text-accent" />
               </div>
-            </div>
-          </CardContent>
-        </Card>
+              <h3 className="font-bold">Explorar</h3>
+              <p className="text-xs text-muted-foreground">Descubra locais</p>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Categories */}
         <section>

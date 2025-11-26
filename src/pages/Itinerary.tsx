@@ -99,21 +99,73 @@ const Itinerary = () => {
 
       <main className="container mx-auto max-w-4xl px-4 py-6 space-y-6">
         {/* Trip Info */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Informações da Viagem</CardTitle>
+        <Card className="border-2 border-primary/20">
+          <CardHeader className="bg-gradient-to-r from-primary/5 to-accent/5">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Calendar className="h-5 w-5 text-primary" />
+              Informações da Viagem
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="destination">Destino</Label>
-                <Input id="destination" placeholder="Ex: Salvador, BA" />
+                <Label htmlFor="destination" className="text-base font-semibold">
+                  Destino
+                </Label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input 
+                    id="destination" 
+                    placeholder="Ex: Salvador, BA" 
+                    className="pl-10"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  💡 Dica: Comece digitando a cidade
+                </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="date">Data</Label>
-                <Input id="date" type="date" />
+                <Label htmlFor="date" className="text-base font-semibold">
+                  Data
+                </Label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input 
+                    id="date" 
+                    type="date" 
+                    className="pl-10"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  📅 Selecione quando pretende viajar
+                </p>
               </div>
             </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="interests" className="text-base font-semibold">
+                Interesses
+              </Label>
+              <div className="flex flex-wrap gap-2">
+                {["Gastronomia", "Cultura", "Aventura", "Praia", "História", "Natureza"].map((interest) => (
+                  <Badge
+                    key={interest}
+                    variant="outline"
+                    className="cursor-pointer px-3 py-1.5 hover:bg-primary hover:text-primary-foreground"
+                  >
+                    {interest}
+                  </Badge>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                🎯 Selecione seus interesses para recomendações personalizadas
+              </p>
+            </div>
+
+            <Button className="w-full bg-primary hover:bg-primary-hover">
+              <Sparkles className="mr-2 h-4 w-4" />
+              Gerar Sugestões com IA
+            </Button>
           </CardContent>
         </Card>
 
