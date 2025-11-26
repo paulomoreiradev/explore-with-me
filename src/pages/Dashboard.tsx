@@ -167,20 +167,20 @@ const Dashboard = () => {
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[
               {
-                name: "São Paulo",
-                image: "https://images.unsplash.com/photo-1541661538396-53ba2d051eed?w=400&h=300&fit=crop",
+                name: "Caucaia",
+                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
               },
               {
-                name: "Rio de Janeiro",
-                image: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=400&h=300&fit=crop",
+                name: "Aracati",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop",
               },
               {
-                name: "Salvador",
-                image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=400&h=300&fit=crop",
+                name: "Camocim",
+                image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&h=300&fit=crop",
               },
               {
-                name: "Fortaleza",
-                image: "https://images.unsplash.com/photo-1595948128165-f155c4c99e38?w=400&h=300&fit=crop",
+                name: "Sobral",
+                image: "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=400&h=300&fit=crop",
               },
             ].map((city) => (
               <Card
