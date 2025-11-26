@@ -60,7 +60,8 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background pb-24">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-hero">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&h=600&fit=crop')] bg-cover bg-center opacity-20" />
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&h=600&fit=crop')] bg-cover bg-center opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/40" />
         <div className="container relative mx-auto px-4 py-12">
           <div className="mb-6 flex items-center justify-between">
             <div>
