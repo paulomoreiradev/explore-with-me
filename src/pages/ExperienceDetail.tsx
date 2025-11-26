@@ -11,8 +11,8 @@ const ExperienceDetail = () => {
   const { id } = useParams();
 
   const experience = {
-    title: "Tour Gastronômico no Centro Histórico",
-    location: "Salvador, BA",
+    title: "Tour Gastronômico",
+    location: "Jijoca de Jericoacoara, CE",
     duration: "3 horas",
     price: 150,
     rating: 4.9,
@@ -22,17 +22,18 @@ const ExperienceDetail = () => {
     guideName: "Maria Silva",
     guideAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria",
     maxPeople: 8,
-    description: "Descubra os sabores autênticos da Bahia em um tour pelos melhores restaurantes e mercados do centro histórico de Salvador. Uma experiência única que combina gastronomia, história e cultura local.",
+    description:
+      "Descubra os sabores autênticos da culinária Cearense em um tour pelos melhores restaurantes do litoral oeste do Ceará. Uma experiência única que combina gastronomia, história e cultura local.",
     included: [
       "Degustação em 5 estabelecimentos locais",
-      "Guia especializado em gastronomia baiana",
+      "Guia especializado em gastronomia cearense",
       "Água mineral durante o passeio",
       "Material informativo sobre a culinária local",
     ],
     schedule: [
-      "09:00 - Encontro no Pelourinho",
-      "09:30 - Primeira parada: Acarajé da Regina",
-      "10:30 - Mercado Modelo",
+      "09:00 - Encontro na Igreja Matriz",
+      "09:30 - Primeira parada: Tapioca da Regina",
+      "10:30 - Mercado Municipal",
       "11:30 - Almoço em restaurante típico",
       "12:30 - Encerramento",
     ],
@@ -43,7 +44,8 @@ const ExperienceDetail = () => {
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=João",
         rating: 5,
         date: "15 dias atrás",
-        comment: "Experiência incrível! A Maria é uma guia excepcional e conhece cada cantinho da cidade. A comida estava maravilhosa!",
+        comment:
+          "Experiência incrível! A Maria é uma guia excepcional e conhece cada cantinho da cidade. A comida estava maravilhosa!",
       },
       {
         id: "2",
@@ -51,7 +53,8 @@ const ExperienceDetail = () => {
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana",
         rating: 5,
         date: "1 mês atrás",
-        comment: "Melhor tour gastronômico que já fiz! Super recomendo para quem quer conhecer a verdadeira culinária baiana.",
+        comment:
+          "Melhor tour gastronômico que já fiz! Super recomendo para quem quer conhecer a verdadeira culinária cearense.",
       },
     ],
   };
@@ -60,13 +63,9 @@ const ExperienceDetail = () => {
     <div className="min-h-screen bg-background">
       {/* Image Header */}
       <div className="relative h-80 w-full">
-        <img
-          src={experience.imageUrl}
-          alt={experience.title}
-          className="h-full w-full object-cover"
-        />
+        <img src={experience.imageUrl} alt={experience.title} className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        
+
         <Button
           variant="secondary"
           size="icon"
@@ -85,16 +84,14 @@ const ExperienceDetail = () => {
           </Button>
         </div>
 
-        <Badge className="absolute bottom-4 left-4 bg-accent text-accent-foreground">
-          {experience.category}
-        </Badge>
+        <Badge className="absolute bottom-4 left-4 bg-accent text-accent-foreground">{experience.category}</Badge>
       </div>
 
       {/* Content */}
       <div className="container mx-auto max-w-4xl px-4 py-6">
         <div className="mb-6">
           <h1 className="mb-3 text-3xl font-bold">{experience.title}</h1>
-          
+
           <div className="mb-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
@@ -115,9 +112,7 @@ const ExperienceDetail = () => {
               <Star className="h-5 w-5 fill-secondary text-secondary" />
               <span className="text-lg font-bold">{experience.rating}</span>
             </div>
-            <span className="text-sm text-muted-foreground">
-              ({experience.reviewCount} avaliações)
-            </span>
+            <span className="text-sm text-muted-foreground">({experience.reviewCount} avaliações)</span>
           </div>
         </div>
 
@@ -215,11 +210,7 @@ const ExperienceDetail = () => {
               <span className="text-sm font-normal text-muted-foreground"> / pessoa</span>
             </p>
           </div>
-          <Button 
-            size="lg" 
-            className="bg-primary hover:bg-primary-hover"
-            onClick={() => navigate("/payment")}
-          >
+          <Button size="lg" className="bg-primary hover:bg-primary-hover" onClick={() => navigate("/payment")}>
             Reservar Agora
           </Button>
         </div>
