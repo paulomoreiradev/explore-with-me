@@ -169,7 +169,7 @@ const Dashboard = () => {
             {[
               { 
                 name: "São Paulo", 
-                image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&h=300&fit=crop"
+                image: "https://images.unsplash.com/photo-1598974357801-cbf22d86bf08?w=400&h=300&fit=crop"
               },
               { 
                 name: "Rio de Janeiro", 
@@ -177,7 +177,7 @@ const Dashboard = () => {
               },
               { 
                 name: "Salvador", 
-                image: "https://images.unsplash.com/photo-1591634616938-1dfa7ee2e617?w=400&h=300&fit=crop"
+                image: "https://images.unsplash.com/photo-1618481187111-25e223f66ca6?w=400&h=300&fit=crop"
               },
               { 
                 name: "Florianópolis", 
