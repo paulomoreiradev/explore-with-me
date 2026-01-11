@@ -31,7 +31,8 @@ const Dashboard = () => {
       price: 120,
       rating: 4.8,
       reviewCount: 89,
-      imageUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Guaramiranga_Pico_Alto.JPG/1280px-Guaramiranga_Pico_Alto.JPG",
       category: "Aventura",
       guideName: "João Santos",
     },
