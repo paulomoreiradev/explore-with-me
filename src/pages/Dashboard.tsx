@@ -180,7 +180,7 @@ const Dashboard = () => {
               },
               {
                 name: "Sobral",
-                image: "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=400&h=300&fit=crop",
+                image: "https://www.sobral.ufc.br/wp-content/uploads/2014/11/800px-MARGEM_ESQUERDA.jpg",
               },
             ].map((city) => (
               <Card
