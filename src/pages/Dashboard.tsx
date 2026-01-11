@@ -44,7 +44,8 @@ const Dashboard = () => {
       price: 90,
       rating: 5.0,
       reviewCount: 203,
-      imageUrl: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=600&fit=crop",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/e/e1/Apresenta%C3%A7%C3%A3o_de_Forr%C3%B3_%282457934394%29.jpg",
       category: "Cultura",
       guideName: "Ana Costa",
     },
