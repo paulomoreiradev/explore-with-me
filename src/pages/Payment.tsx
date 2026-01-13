@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, CreditCard, Check } from "lucide-react";
+import { ArrowLeft, CreditCard, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,18 +8,24 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useBookings } from "@/hooks/useBookings";
 
 const Payment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { addBooking } = useBookings();
   const [paymentMethod, setPaymentMethod] = useState("credit");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const booking = {
     experience: "Tour Gastronômico no Centro Histórico",
+    location: "Jijoca de Jericoacoara, CE",
     date: "15 de Dezembro, 2024",
     time: "09:00",
     people: 2,
     pricePerPerson: 150,
+    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop",
+    guideName: "Maria Silva",
   };
 
   const total = booking.pricePerPerson * booking.people;
@@ -28,12 +34,31 @@ const Payment = () => {
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Pagamento confirmado!",
-      description: "Você receberá um e-mail com os detalhes da reserva",
-    });
+    setIsProcessing(true);
+
+    // Simular processamento do pagamento
     setTimeout(() => {
-      navigate("/dashboard");
+      addBooking({
+        experience: booking.experience,
+        location: booking.location,
+        date: booking.date,
+        time: booking.time,
+        people: booking.people,
+        total: grandTotal,
+        status: "confirmed",
+        imageUrl: booking.imageUrl,
+        guideName: booking.guideName,
+      });
+
+      setIsProcessing(false);
+      toast({
+        title: "Pagamento confirmado! 🎉",
+        description: "Sua reserva foi realizada com sucesso!",
+      });
+      
+      setTimeout(() => {
+        navigate("/bookings");
+      }, 1500);
     }, 2000);
   };
 
@@ -141,8 +166,16 @@ const Payment = () => {
                       type="submit"
                       className="w-full bg-primary hover:bg-primary-hover"
                       size="lg"
+                      disabled={isProcessing}
                     >
-                      Confirmar Pagamento
+                      {isProcessing ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Processando...
+                        </>
+                      ) : (
+                        "Confirmar Pagamento"
+                      )}
                     </Button>
                   </form>
                 </CardContent>
@@ -163,8 +196,16 @@ const Payment = () => {
                       onClick={handlePayment}
                       className="w-full bg-primary hover:bg-primary-hover"
                       size="lg"
+                      disabled={isProcessing}
                     >
-                      Confirmar Pagamento
+                      {isProcessing ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Processando...
+                        </>
+                      ) : (
+                        "Confirmar Pagamento"
+                      )}
                     </Button>
                   </div>
                 </CardContent>
