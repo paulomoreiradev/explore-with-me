@@ -10,6 +10,7 @@ import ExperienceDetail from "./pages/ExperienceDetail";
 import Itinerary from "./pages/Itinerary";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
+import Bookings from "./pages/Bookings";
 import GuideDashboard from "./pages/GuideDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/itinerary" element={<Itinerary />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/bookings" element={<Bookings />} />
           <Route path="/guide" element={<GuideDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
