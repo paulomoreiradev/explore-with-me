@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, Calendar, MapPin, Clock, Trash2, Eye, ChevronRight } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Clock, Trash2, ChevronRight, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -75,6 +75,19 @@ const MyItineraries = () => {
       title: "Roteiro excluído",
       description: "O roteiro foi removido com sucesso",
     });
+  };
+
+  const handleCheckout = (itinerary: SavedItinerary) => {
+    // Save itinerary data to localStorage for payment page
+    localStorage.setItem("vai-por-mim-checkout-itinerary", JSON.stringify({
+      type: "itinerary",
+      id: itinerary.id,
+      city: getCityName(itinerary.city),
+      date: itinerary.date,
+      items: itinerary.items,
+      totalCost: itinerary.totalCost,
+    }));
+    navigate("/payment");
   };
 
   const formatDate = (dateString: string) => {
@@ -200,15 +213,24 @@ const MyItineraries = () => {
                     </div>
 
                     <div className="flex gap-2">
+                      <Button
+                        className="flex-1"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCheckout(itinerary);
+                        }}
+                      >
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Reservar Roteiro
+                      </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button 
                             variant="destructive" 
-                            className="flex-1"
+                            size="icon"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Excluir
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
