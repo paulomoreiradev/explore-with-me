@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ArrowLeft, Star, MapPin, Clock, Users, Calendar, Heart, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -5,12 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate, useParams } from "react-router-dom";
+import { useFavorites, FavoriteExperience } from "@/hooks/useFavorites";
+import { useToast } from "@/hooks/use-toast";
 
-const ExperienceDetail = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  const experience = {
+// Mock experiences data
+const experiencesData: Record<string, any> = {
+  "1": {
+    id: "1",
     title: "Tour Gastronômico",
     location: "Jijoca de Jericoacoara, CE",
     duration: "3 horas",
@@ -20,6 +22,7 @@ const ExperienceDetail = () => {
     imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&h=800&fit=crop",
     category: "Gastronomia",
     guideName: "Maria Silva",
+    guideId: "1",
     guideAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria",
     maxPeople: 8,
     description:
@@ -57,6 +60,158 @@ const ExperienceDetail = () => {
           "Melhor tour gastronômico que já fiz! Super recomendo para quem quer conhecer a verdadeira culinária cearense.",
       },
     ],
+  },
+  "2": {
+    id: "2",
+    title: "Trilha ao Pôr do Sol na Serra",
+    location: "Guaramiranga, CE",
+    duration: "4 horas",
+    price: 120,
+    rating: 4.8,
+    reviewCount: 89,
+    imageUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&h=800&fit=crop",
+    category: "Aventura",
+    guideName: "João Santos",
+    guideId: "2",
+    guideAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=João",
+    maxPeople: 12,
+    description:
+      "Uma trilha inesquecível pela Serra de Guaramiranga, culminando em um pôr do sol espetacular. Perfeita para amantes da natureza e aventura.",
+    included: [
+      "Guia especializado em trilhas",
+      "Equipamentos de segurança",
+      "Lanche energético",
+      "Transporte do ponto de encontro",
+    ],
+    schedule: [
+      "15:00 - Encontro no centro de Guaramiranga",
+      "15:30 - Início da trilha",
+      "17:00 - Chegada ao mirante",
+      "18:00 - Contemplação do pôr do sol",
+      "19:00 - Retorno",
+    ],
+    reviews: [
+      {
+        id: "1",
+        author: "Mariana Lima",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana",
+        rating: 5,
+        date: "3 dias atrás",
+        comment: "Paisagens deslumbrantes! O João conhece todos os melhores pontos para fotos.",
+      },
+    ],
+  },
+};
+
+const defaultExperience = {
+  id: "1",
+  title: "Tour Gastronômico",
+  location: "Jijoca de Jericoacoara, CE",
+  duration: "3 horas",
+  price: 150,
+  rating: 4.9,
+  reviewCount: 127,
+  imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&h=800&fit=crop",
+  category: "Gastronomia",
+  guideName: "Maria Silva",
+  guideId: "1",
+  guideAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria",
+  maxPeople: 8,
+  description:
+    "Descubra os sabores autênticos da culinária Cearense em um tour pelos melhores restaurantes do litoral oeste do Ceará. Uma experiência única que combina gastronomia, história e cultura local.",
+  included: [
+    "Degustação em 5 estabelecimentos locais",
+    "Guia especializado em gastronomia cearense",
+    "Água mineral durante o passeio",
+    "Material informativo sobre a culinária local",
+  ],
+  schedule: [
+    "09:00 - Encontro na Igreja Matriz",
+    "09:30 - Primeira parada: Tapioca da Regina",
+    "10:30 - Mercado Municipal",
+    "11:30 - Almoço em restaurante típico",
+    "12:30 - Encerramento",
+  ],
+  reviews: [
+    {
+      id: "1",
+      author: "João Pedro",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=João",
+      rating: 5,
+      date: "15 dias atrás",
+      comment:
+        "Experiência incrível! A Maria é uma guia excepcional e conhece cada cantinho da cidade. A comida estava maravilhosa!",
+    },
+    {
+      id: "2",
+      author: "Ana Carolina",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana",
+      rating: 5,
+      date: "1 mês atrás",
+      comment:
+        "Melhor tour gastronômico que já fiz! Super recomendo para quem quer conhecer a verdadeira culinária cearense.",
+    },
+  ],
+};
+
+const ExperienceDetail = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { toast } = useToast();
+  const { isFavorite, toggleFavorite } = useFavorites();
+
+  const experience = id && experiencesData[id] ? experiencesData[id] : defaultExperience;
+  const [isLiked, setIsLiked] = useState(isFavorite(experience.id));
+
+  const handleFavorite = () => {
+    const favoriteData: FavoriteExperience = {
+      id: experience.id,
+      title: experience.title,
+      location: experience.location,
+      duration: experience.duration,
+      price: experience.price,
+      rating: experience.rating,
+      reviewCount: experience.reviewCount,
+      imageUrl: experience.imageUrl,
+      category: experience.category,
+      guideName: experience.guideName,
+    };
+
+    const added = toggleFavorite(favoriteData);
+    setIsLiked(added);
+    
+    toast({
+      title: added ? "Adicionado aos favoritos" : "Removido dos favoritos",
+      description: added 
+        ? `${experience.title} foi salvo na sua lista de favoritos`
+        : `${experience.title} foi removido da sua lista`,
+    });
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: experience.title,
+      text: `Confira essa experiência incrível: ${experience.title} em ${experience.location}`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link copiado!",
+          description: "O link foi copiado para a área de transferência",
+        });
+      }
+    } catch (error) {
+      // User cancelled share
+    }
+  };
+
+  const handleViewGuideProfile = () => {
+    navigate(`/guide-profile/${experience.guideId}`);
   };
 
   return (
@@ -76,10 +231,20 @@ const ExperienceDetail = () => {
         </Button>
 
         <div className="absolute right-4 top-4 flex gap-2">
-          <Button variant="secondary" size="icon" className="shadow-lg">
-            <Heart className="h-5 w-5" />
+          <Button 
+            variant="secondary" 
+            size="icon" 
+            className="shadow-lg"
+            onClick={handleFavorite}
+          >
+            <Heart className={`h-5 w-5 ${isLiked ? "fill-red-500 text-red-500" : ""}`} />
           </Button>
-          <Button variant="secondary" size="icon" className="shadow-lg">
+          <Button 
+            variant="secondary" 
+            size="icon" 
+            className="shadow-lg"
+            onClick={handleShare}
+          >
             <Share2 className="h-5 w-5" />
           </Button>
         </div>
@@ -130,7 +295,7 @@ const ExperienceDetail = () => {
               <p className="text-lg font-bold text-primary">{experience.guideName}</p>
               <p className="text-sm text-muted-foreground">Guia local verificada</p>
             </div>
-            <Button variant="outline">Ver Perfil</Button>
+            <Button variant="outline" onClick={handleViewGuideProfile}>Ver Perfil</Button>
           </CardContent>
         </Card>
 
@@ -144,7 +309,7 @@ const ExperienceDetail = () => {
         <section className="mb-6">
           <h2 className="mb-3 text-xl font-bold">O que está incluído</h2>
           <ul className="space-y-2">
-            {experience.included.map((item, index) => (
+            {experience.included.map((item: string, index: number) => (
               <li key={index} className="flex items-start gap-2">
                 <div className="mt-1 h-2 w-2 rounded-full bg-primary" />
                 <span className="text-muted-foreground">{item}</span>
@@ -157,7 +322,7 @@ const ExperienceDetail = () => {
         <section className="mb-6">
           <h2 className="mb-3 text-xl font-bold">Programação</h2>
           <div className="space-y-3">
-            {experience.schedule.map((item, index) => (
+            {experience.schedule.map((item: string, index: number) => (
               <div key={index} className="flex items-start gap-3">
                 <Calendar className="h-5 w-5 text-primary" />
                 <span className="text-muted-foreground">{item}</span>
@@ -172,7 +337,7 @@ const ExperienceDetail = () => {
         <section className="mb-20">
           <h2 className="mb-4 text-xl font-bold">Avaliações</h2>
           <div className="space-y-4">
-            {experience.reviews.map((review) => (
+            {experience.reviews.map((review: any) => (
               <Card key={review.id}>
                 <CardContent className="p-4">
                   <div className="mb-3 flex items-start justify-between">
