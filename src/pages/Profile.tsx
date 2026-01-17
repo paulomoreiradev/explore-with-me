@@ -1,4 +1,4 @@
-import { Settings, Heart, Calendar, Star, LogOut, ChevronRight } from "lucide-react";
+import { Settings, Heart, Calendar, Star, LogOut, ChevronRight, Route } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,6 +13,7 @@ const Profile = () => {
 
   const menuItems = [
     { icon: Calendar, label: "Minhas Reservas", path: "/bookings" },
+    { icon: Route, label: "Meus Roteiros", path: "/my-itineraries" },
     { icon: Heart, label: "Favoritos", path: "/favorites" },
     { icon: Star, label: "Avaliações", path: "/reviews" },
     { icon: Settings, label: "Configurações", path: "/settings" },
