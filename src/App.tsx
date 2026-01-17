@@ -11,6 +11,11 @@ import Itinerary from "./pages/Itinerary";
 import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 import Bookings from "./pages/Bookings";
+import Favorites from "./pages/Favorites";
+import Reviews from "./pages/Reviews";
+import Settings from "./pages/Settings";
+import GuideProfile from "./pages/GuideProfile";
+import Chat from "./pages/Chat";
 import GuideDashboard from "./pages/GuideDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -33,6 +38,11 @@ const App = () => (
           <Route path="/payment" element={<Payment />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/bookings" element={<Bookings />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/reviews" element={<Reviews />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/guide-profile/:id" element={<GuideProfile />} />
+          <Route path="/chat/:guideId" element={<Chat />} />
           <Route path="/guide" element={<GuideDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

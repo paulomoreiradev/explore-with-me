@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Plus, Calendar, MapPin, Clock, Trash2, Save, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Calendar, MapPin, Clock, Trash2, Save, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import BottomNav from "@/components/BottomNav";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface ItineraryItem {
   id: string;
@@ -18,54 +20,46 @@ interface ItineraryItem {
   type: string;
 }
 
+// Mock cities data (simulating API)
+const mockCities = [
+  { id: "1", name: "Fortaleza", state: "CE" },
+  { id: "2", name: "Jijoca de Jericoacoara", state: "CE" },
+  { id: "3", name: "Canoa Quebrada", state: "CE" },
+  { id: "4", name: "Guaramiranga", state: "CE" },
+  { id: "5", name: "Aquiraz", state: "CE" },
+  { id: "6", name: "Baturité", state: "CE" },
+  { id: "7", name: "Caucaia", state: "CE" },
+  { id: "8", name: "Aracati", state: "CE" },
+  { id: "9", name: "Camocim", state: "CE" },
+  { id: "10", name: "Sobral", state: "CE" },
+  { id: "11", name: "Crato", state: "CE" },
+  { id: "12", name: "Juazeiro do Norte", state: "CE" },
+];
+
 const Itinerary = () => {
   const { toast } = useToast();
-  const [items, setItems] = useState<ItineraryItem[]>([
-    {
-      id: "1",
-      title: "Tour Gastronômico",
-      time: "09:00",
-      duration: "3h",
-      location: "Centro Histórico",
-      price: 150,
-      type: "Gastronomia",
-    },
-    {
-      id: "2",
-      title: "Visita ao Museu de Arte",
-      time: "14:00",
-      duration: "2h",
-      location: "Bairro Cultural",
-      price: 45,
-      type: "Cultura",
-    },
-  ]);
+  const navigate = useNavigate();
+  const [items, setItems] = useState<ItineraryItem[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [suggestions, setSuggestions] = useState<ItineraryItem[]>([]);
 
-  const suggestions = [
-    {
-      id: "3",
-      title: "Pôr do Sol na Praia",
-      time: "17:30",
-      duration: "1.5h",
-      location: "Praia do Farol",
-      price: 0,
-      type: "Lazer",
-    },
-    {
-      id: "4",
-      title: "Jantar em Restaurante Local",
-      time: "19:30",
-      duration: "2h",
-      location: "Orla",
-      price: 120,
-      type: "Gastronomia",
-    },
-  ];
+  const interests = ["Gastronomia", "Cultura", "Aventura", "Praia", "História", "Natureza"];
+
+  const toggleInterest = (interest: string) => {
+    setSelectedInterests((prev) =>
+      prev.includes(interest)
+        ? prev.filter((i) => i !== interest)
+        : [...prev, interest]
+    );
+  };
 
   const totalCost = items.reduce((sum, item) => sum + item.price, 0);
 
   const handleRemoveItem = (id: string) => {
-    setItems(items.filter(item => item.id !== id));
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     toast({
       title: "Item removido",
       description: "O item foi removido do seu roteiro",
@@ -73,18 +67,138 @@ const Itinerary = () => {
   };
 
   const handleAddSuggestion = (suggestion: ItineraryItem) => {
-    setItems([...items, suggestion]);
+    // Check if item already exists
+    const exists = items.some((item) => item.id === suggestion.id);
+    if (exists) {
+      toast({
+        title: "Item já adicionado",
+        description: "Esta atividade já está no seu roteiro",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create a new item with a unique ID
+    const newItem: ItineraryItem = {
+      ...suggestion,
+      id: `${suggestion.id}-${Date.now()}`, // Make ID unique
+    };
+
+    setItems((prevItems) => [...prevItems, newItem]);
     toast({
       title: "Item adicionado",
       description: "O item foi adicionado ao seu roteiro",
     });
   };
 
+  const generateAISuggestions = () => {
+    if (!selectedCity) {
+      toast({
+        title: "Selecione um destino",
+        description: "Escolha uma cidade para gerar sugestões personalizadas",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+
+    // Simulate AI generation with a delay
+    setTimeout(() => {
+      const cityName = mockCities.find((c) => c.id === selectedCity)?.name || "Destino";
+      
+      const generatedSuggestions: ItineraryItem[] = [
+        {
+          id: `ai-${Date.now()}-1`,
+          title: `Café da Manhã em ${cityName}`,
+          time: "08:00",
+          duration: "1h",
+          location: `Centro de ${cityName}`,
+          price: 45,
+          type: selectedInterests.includes("Gastronomia") ? "Gastronomia" : "Lazer",
+        },
+        {
+          id: `ai-${Date.now()}-2`,
+          title: selectedInterests.includes("Praia") 
+            ? `Passeio nas Praias de ${cityName}`
+            : `Tour Cultural em ${cityName}`,
+          time: "10:00",
+          duration: "3h",
+          location: cityName,
+          price: selectedInterests.includes("Praia") ? 80 : 60,
+          type: selectedInterests.includes("Praia") ? "Praia" : "Cultura",
+        },
+        {
+          id: `ai-${Date.now()}-3`,
+          title: "Almoço Típico Regional",
+          time: "13:00",
+          duration: "1.5h",
+          location: `Restaurante Local - ${cityName}`,
+          price: 75,
+          type: "Gastronomia",
+        },
+        {
+          id: `ai-${Date.now()}-4`,
+          title: selectedInterests.includes("Aventura")
+            ? "Trilha ao Pôr do Sol"
+            : "Passeio pelo Centro Histórico",
+          time: "16:00",
+          duration: "2h",
+          location: cityName,
+          price: selectedInterests.includes("Aventura") ? 100 : 40,
+          type: selectedInterests.includes("Aventura") ? "Aventura" : "História",
+        },
+        {
+          id: `ai-${Date.now()}-5`,
+          title: "Jantar com Música ao Vivo",
+          time: "19:30",
+          duration: "2.5h",
+          location: `Orla de ${cityName}`,
+          price: 120,
+          type: "Gastronomia",
+        },
+      ];
+
+      setSuggestions(generatedSuggestions);
+      setIsGenerating(false);
+
+      toast({
+        title: "Sugestões geradas!",
+        description: `Criamos ${generatedSuggestions.length} atividades personalizadas para você`,
+      });
+    }, 2000);
+  };
+
   const handleSave = () => {
+    if (items.length === 0) {
+      toast({
+        title: "Roteiro vazio",
+        description: "Adicione pelo menos uma atividade antes de salvar",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Save to localStorage
+    const savedItinerary = {
+      id: crypto.randomUUID(),
+      city: selectedCity,
+      date: selectedDate,
+      items,
+      totalCost,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existingItineraries = JSON.parse(localStorage.getItem("vai-por-mim-itineraries") || "[]");
+    localStorage.setItem("vai-por-mim-itineraries", JSON.stringify([savedItinerary, ...existingItineraries]));
+
     toast({
       title: "Roteiro salvo!",
       description: "Seu roteiro foi salvo com sucesso",
     });
+
+    // Navigate to bookings page
+    navigate("/bookings");
   };
 
   return (
@@ -112,16 +226,23 @@ const Itinerary = () => {
                 <Label htmlFor="destination" className="text-base font-semibold">
                   Destino
                 </Label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input 
-                    id="destination" 
-                    placeholder="Ex: Salvador, BA" 
-                    className="pl-10"
-                  />
-                </div>
+                <Select value={selectedCity} onValueChange={setSelectedCity}>
+                  <SelectTrigger className="w-full">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      <SelectValue placeholder="Selecione uma cidade" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mockCities.map((city) => (
+                      <SelectItem key={city.id} value={city.id}>
+                        {city.name}, {city.state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <p className="text-xs text-muted-foreground">
-                  💡 Dica: Comece digitando a cidade
+                  💡 Dica: Selecione a cidade que deseja visitar
                 </p>
               </div>
               <div className="space-y-2">
@@ -134,6 +255,8 @@ const Itinerary = () => {
                     id="date" 
                     type="date" 
                     className="pl-10"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
@@ -147,11 +270,16 @@ const Itinerary = () => {
                 Interesses
               </Label>
               <div className="flex flex-wrap gap-2">
-                {["Gastronomia", "Cultura", "Aventura", "Praia", "História", "Natureza"].map((interest) => (
+                {interests.map((interest) => (
                   <Badge
                     key={interest}
-                    variant="outline"
-                    className="cursor-pointer px-3 py-1.5 hover:bg-primary hover:text-primary-foreground"
+                    variant={selectedInterests.includes(interest) ? "default" : "outline"}
+                    className={`cursor-pointer px-3 py-1.5 transition-smooth ${
+                      selectedInterests.includes(interest)
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-primary hover:text-primary-foreground"
+                    }`}
+                    onClick={() => toggleInterest(interest)}
                   >
                     {interest}
                   </Badge>
@@ -162,59 +290,82 @@ const Itinerary = () => {
               </p>
             </div>
 
-            <Button className="w-full bg-primary hover:bg-primary-hover">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Gerar Sugestões com IA
+            <Button 
+              className="w-full bg-primary hover:bg-primary-hover"
+              onClick={generateAISuggestions}
+              disabled={isGenerating}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Gerando sugestões...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Gerar Sugestões com IA
+                </>
+              )}
             </Button>
           </CardContent>
         </Card>
 
         {/* AI Suggestions */}
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <CardTitle className="text-lg">Sugestões Personalizadas</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-4 text-sm text-muted-foreground">
-              Baseadas nos seus interesses e no tempo disponível
-            </p>
-            <div className="space-y-3">
-              {suggestions.map((suggestion) => (
-                <div
-                  key={suggestion.id}
-                  className="flex items-center justify-between rounded-lg border border-border bg-background p-3"
-                >
-                  <div className="flex-1">
-                    <h4 className="font-semibold">{suggestion.title}</h4>
-                    <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {suggestion.time}
-                      </span>
-                      <span>•</span>
-                      <span>{suggestion.duration}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {suggestion.location}
-                      </span>
-                    </div>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleAddSuggestion(suggestion)}
+        {suggestions.length > 0 && (
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <CardTitle className="text-lg">Sugestões Personalizadas</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Baseadas nos seus interesses e no destino selecionado
+              </p>
+              <div className="space-y-3">
+                {suggestions.map((suggestion) => (
+                  <div
+                    key={suggestion.id}
+                    className="flex items-center justify-between rounded-lg border border-border bg-background p-3"
                   >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                    <div className="flex-1">
+                      <h4 className="font-semibold">{suggestion.title}</h4>
+                      <div className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {suggestion.time}
+                        </span>
+                        <span>•</span>
+                        <span>{suggestion.duration}</span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {suggestion.location}
+                        </span>
+                      </div>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Badge variant="secondary" className="text-xs">
+                          {suggestion.type}
+                        </Badge>
+                        <span className="text-sm font-semibold text-primary">
+                          R$ {suggestion.price.toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleAddSuggestion(suggestion)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Current Itinerary */}
         <Card>
@@ -222,7 +373,7 @@ const Itinerary = () => {
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Seu Roteiro</CardTitle>
               <Badge variant="outline" className="text-primary">
-                {items.length} atividades
+                {items.length} atividade{items.length !== 1 ? "s" : ""}
               </Badge>
             </div>
           </CardHeader>
@@ -231,7 +382,7 @@ const Itinerary = () => {
               <div className="py-12 text-center">
                 <Calendar className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
                 <p className="text-muted-foreground">
-                  Seu roteiro está vazio. Adicione atividades das sugestões acima!
+                  Seu roteiro está vazio. Gere sugestões com IA e adicione atividades!
                 </p>
               </div>
             ) : (
