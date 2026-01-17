@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, CreditCard, Check, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowLeft, CreditCard, Check, Loader2, MapPin, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,14 +10,31 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useBookings } from "@/hooks/useBookings";
 
+interface ItineraryCheckout {
+  type: "itinerary";
+  id: string;
+  city: string;
+  date: string;
+  items: { title: string; price: number }[];
+  totalCost: number;
+}
+
 const Payment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { addBooking } = useBookings();
   const [paymentMethod, setPaymentMethod] = useState("credit");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [itineraryData, setItineraryData] = useState<ItineraryCheckout | null>(null);
 
-  const booking = {
+  useEffect(() => {
+    const savedItinerary = localStorage.getItem("vai-por-mim-checkout-itinerary");
+    if (savedItinerary) {
+      setItineraryData(JSON.parse(savedItinerary));
+    }
+  }, []);
+
+  const defaultBooking = {
     experience: "Tour Gastronômico no Centro Histórico",
     location: "Jijoca de Jericoacoara, CE",
     date: "15 de Dezembro, 2024",
@@ -28,7 +45,11 @@ const Payment = () => {
     guideName: "Maria Silva",
   };
 
-  const total = booking.pricePerPerson * booking.people;
+  const isItineraryCheckout = itineraryData?.type === "itinerary";
+  
+  const total = isItineraryCheckout 
+    ? itineraryData.totalCost 
+    : defaultBooking.pricePerPerson * defaultBooking.people;
   const serviceFee = total * 0.1;
   const grandTotal = total + serviceFee;
 
@@ -38,17 +59,37 @@ const Payment = () => {
 
     // Simular processamento do pagamento
     setTimeout(() => {
-      addBooking({
-        experience: booking.experience,
-        location: booking.location,
-        date: booking.date,
-        time: booking.time,
-        people: booking.people,
-        total: grandTotal,
-        status: "confirmed",
-        imageUrl: booking.imageUrl,
-        guideName: booking.guideName,
-      });
+      if (isItineraryCheckout) {
+        addBooking({
+          experience: `Roteiro: ${itineraryData.city}`,
+          location: itineraryData.city,
+          date: itineraryData.date ? new Date(itineraryData.date).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          }) : "Data a confirmar",
+          time: "Conforme roteiro",
+          people: 1,
+          total: grandTotal,
+          status: "confirmed",
+          imageUrl: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          guideName: "Múltiplos guias",
+        });
+        // Clear the checkout data
+        localStorage.removeItem("vai-por-mim-checkout-itinerary");
+      } else {
+        addBooking({
+          experience: defaultBooking.experience,
+          location: defaultBooking.location,
+          date: defaultBooking.date,
+          time: defaultBooking.time,
+          people: defaultBooking.people,
+          total: grandTotal,
+          status: "confirmed",
+          imageUrl: defaultBooking.imageUrl,
+          guideName: defaultBooking.guideName,
+        });
+      }
 
       setIsProcessing(false);
       toast({
@@ -220,25 +261,61 @@ const Payment = () => {
                 <CardTitle>Resumo da Reserva</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <h3 className="font-semibold">{booking.experience}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {booking.date} às {booking.time}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {booking.people} {booking.people === 1 ? "pessoa" : "pessoas"}
-                  </p>
-                </div>
+                {isItineraryCheckout ? (
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <MapPin className="h-4 w-4 text-primary" />
+                      <h3 className="font-semibold">Roteiro: {itineraryData.city}</h3>
+                    </div>
+                    {itineraryData.date && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                        <Calendar className="h-4 w-4" />
+                        <span>
+                          {new Date(itineraryData.date).toLocaleDateString("pt-BR", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric"
+                          })}
+                        </span>
+                      </div>
+                    )}
+                    <div className="space-y-2 text-sm">
+                      {itineraryData.items.map((item, index) => (
+                        <div key={index} className="flex justify-between">
+                          <span className="text-muted-foreground">{item.title}</span>
+                          <span>R$ {item.price.toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <h3 className="font-semibold">{defaultBooking.experience}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {defaultBooking.date} às {defaultBooking.time}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {defaultBooking.people} {defaultBooking.people === 1 ? "pessoa" : "pessoas"}
+                    </p>
+                  </div>
+                )}
 
                 <Separator />
 
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">
-                      R$ {booking.pricePerPerson.toFixed(2)} x {booking.people}
-                    </span>
-                    <span className="font-medium">R$ {total.toFixed(2)}</span>
-                  </div>
+                  {isItineraryCheckout ? (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Subtotal ({itineraryData.items.length} atividades)</span>
+                      <span className="font-medium">R$ {total.toFixed(2)}</span>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        R$ {defaultBooking.pricePerPerson.toFixed(2)} x {defaultBooking.people}
+                      </span>
+                      <span className="font-medium">R$ {total.toFixed(2)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Taxa de serviço</span>
                     <span className="font-medium">R$ {serviceFee.toFixed(2)}</span>
