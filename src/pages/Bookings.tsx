@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Clock, Users, MoreVertical } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, MoreVertical, Star, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -105,13 +105,25 @@ const BookingCard = ({
                 R$ {booking.total.toFixed(2)}
               </span>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate("/experience/1")}
-            >
-              Ver Detalhes
-            </Button>
+            <div className="flex gap-2">
+              {booking.status === "completed" && (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => navigate(`/write-review/${booking.id}`)}
+                >
+                  <Star className="mr-1 h-4 w-4" />
+                  Avaliar
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/experience/1")}
+              >
+                Ver Detalhes
+              </Button>
+            </div>
           </div>
         </CardContent>
       </div>
@@ -143,8 +155,19 @@ const Bookings = () => {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <h1 className="text-2xl font-bold text-primary">Minhas Reservas</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            onClick={() => navigate("/notifications")}
+          >
+            <Bell className="h-5 w-5" />
+            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] text-destructive-foreground">
+              3
+            </span>
+          </Button>
         </div>
       </header>
 
