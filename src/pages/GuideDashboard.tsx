@@ -74,7 +74,10 @@ const GuideDashboard = () => {
               <h1 className="text-2xl font-bold text-primary">Dashboard do Guia</h1>
               <p className="text-sm text-muted-foreground">Gerencie suas experiências</p>
             </div>
-            <Button className="bg-primary hover:bg-primary-hover">
+            <Button 
+              className="bg-primary hover:bg-primary-hover"
+              onClick={() => navigate("/create-experience")}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Nova Experiência
             </Button>
