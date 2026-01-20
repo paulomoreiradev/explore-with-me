@@ -173,7 +173,7 @@ const CreateExperience = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="icon" onClick={() => navigate("/guide-dashboard")}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
