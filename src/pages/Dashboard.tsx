@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { Search, Sparkles, TrendingUp, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,8 +8,53 @@ import ExperienceCard from "@/components/ExperienceCard";
 import BottomNav from "@/components/BottomNav";
 import { useNavigate } from "react-router-dom";
 
+const CEARA_CITIES = [
+  "Fortaleza",
+  "Jericoacoara",
+  "Canoa Quebrada",
+  "Guaramiranga",
+  "Caucaia",
+  "Aracati",
+  "Camocim",
+  "Sobral",
+  "Crato",
+  "Juazeiro do Norte",
+  "Quixadá",
+  "Ubajara",
+];
+
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  const filteredCities = CEARA_CITIES.filter((city) =>
+    city.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSearch = (city: string) => {
+    setSearchQuery(city);
+    setShowSuggestions(false);
+    navigate(`/explore?city=${encodeURIComponent(city)}`);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/explore?city=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
 
   const recommendations = [
     {
@@ -70,9 +116,46 @@ const Dashboard = () => {
             <p className="text-lg text-white/90">Descubra experiências autênticas ✨</p>
           </div>
 
-          <div className="relative max-w-4xl mx-auto">
-            <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
-            <Input placeholder="Para onde você quer ir?" className="h-14 bg-white pl-12 pr-4 text-base shadow-lg" />
+          <div ref={searchRef} className="relative max-w-4xl mx-auto">
+            <form onSubmit={handleSearchSubmit}>
+              <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground z-10" />
+              <Input
+                placeholder="Para onde você quer ir?"
+                className="h-14 bg-white pl-12 pr-4 text-base shadow-lg"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
+              />
+            </form>
+            {showSuggestions && (searchQuery.length > 0 || filteredCities.length > 0) && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-border overflow-hidden z-50">
+                {searchQuery.length === 0 ? (
+                  <div className="p-3 text-sm text-muted-foreground border-b">
+                    Destinos populares no Ceará
+                  </div>
+                ) : filteredCities.length === 0 ? (
+                  <div className="p-4 text-sm text-muted-foreground text-center">
+                    Nenhum destino encontrado
+                  </div>
+                ) : null}
+                <div className="max-h-64 overflow-y-auto">
+                  {(searchQuery.length === 0 ? CEARA_CITIES.slice(0, 6) : filteredCities).map((city) => (
+                    <button
+                      key={city}
+                      className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-muted transition-colors"
+                      onClick={() => handleSearch(city)}
+                    >
+                      <MapPin className="h-4 w-4 text-primary" />
+                      <span className="font-medium">{city}</span>
+                      <span className="text-xs text-muted-foreground ml-auto">CE</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-6 flex gap-3 justify-center overflow-x-auto pb-2 max-w-4xl mx-auto">
