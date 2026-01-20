@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Star, MapPin, Clock, Users, Calendar, Heart, Share2 } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Clock, Users, Calendar, Heart, Share2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -295,7 +295,13 @@ const ExperienceDetail = () => {
               <p className="text-lg font-bold text-primary">{experience.guideName}</p>
               <p className="text-sm text-muted-foreground">Guia local verificada</p>
             </div>
-            <Button variant="outline" onClick={handleViewGuideProfile}>Ver Perfil</Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={handleViewGuideProfile}>Ver Perfil</Button>
+              <Button variant="default" onClick={() => navigate(`/chat/${experience.guideId}`)}>
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Chat
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
