@@ -18,6 +18,7 @@ import Settings from "./pages/Settings";
 import GuideProfile from "./pages/GuideProfile";
 import Chat from "./pages/Chat";
 import GuideDashboard from "./pages/GuideDashboard";
+import GuideSchedule from "./pages/GuideSchedule";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/chat/:guideId" element={<Chat />} />
           <Route path="/guide" element={<GuideDashboard />} />
           <Route path="/guide-dashboard" element={<GuideDashboard />} />
+          <Route path="/guide-schedule" element={<GuideSchedule />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

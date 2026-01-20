@@ -1,14 +1,42 @@
-import { Home, Compass, Calendar, User } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Home, Compass, Calendar, User, CalendarDays } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { cn } from "@/lib/utils";
+
+interface CurrentUser {
+  email: string;
+  name: string;
+  type: "traveler" | "guide" | "entrepreneur";
+}
 
 const BottomNav = () => {
-  const navItems = [
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("currentUser");
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const isGuide = currentUser?.type === "guide";
+
+  // Nav items for travelers
+  const travelerNavItems = [
     { icon: Home, label: "Início", path: "/dashboard" },
     { icon: Compass, label: "Explorar", path: "/explore" },
     { icon: Calendar, label: "Roteiro", path: "/itinerary" },
     { icon: User, label: "Perfil", path: "/profile" },
   ];
+
+  // Nav items for guides
+  const guideNavItems = [
+    { icon: Home, label: "Início", path: "/guide-dashboard" },
+    { icon: Compass, label: "Explorar", path: "/explore" },
+    { icon: CalendarDays, label: "Agenda", path: "/guide-schedule" },
+    { icon: User, label: "Perfil", path: "/profile" },
+  ];
+
+  const navItems = isGuide ? guideNavItems : travelerNavItems;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
