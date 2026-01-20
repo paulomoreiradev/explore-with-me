@@ -107,7 +107,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative pb-8">
         <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/80 to-transparent" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&h=600&fit=crop')] bg-cover bg-center opacity-[0.08]" />
         <div className="container relative mx-auto px-4 py-12">
