@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Settings, Heart, Calendar, Star, LogOut, ChevronRight, Map, Plus, BarChart3, Users, MessageSquare } from "lucide-react";
+import { Settings, Heart, Calendar, Star, LogOut, ChevronRight, Map, Plus, BarChart3, DollarSign, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -48,10 +48,10 @@ const Profile = () => {
   // Menu items for guides
   const guideMenuItems = [
     { icon: BarChart3, label: "Dashboard do Guia", path: "/guide-dashboard" },
-    { icon: Plus, label: "Criar Experiência", path: "/guide-dashboard" },
-    { icon: Calendar, label: "Minhas Reservas", path: "/bookings" },
-    { icon: Users, label: "Meus Clientes", path: "/bookings" },
-    { icon: MessageSquare, label: "Mensagens", path: "/chat/1" },
+    { icon: Plus, label: "Criar Experiência", path: "/create-experience" },
+    { icon: Calendar, label: "Minha Agenda", path: "/guide-schedule" },
+    { icon: MessageSquare, label: "Mensagens", path: "/guide-inbox" },
+    { icon: DollarSign, label: "Meus Ganhos", path: "/guide-earnings" },
     { icon: Star, label: "Minhas Avaliações", path: "/reviews" },
     { icon: Settings, label: "Configurações", path: "/settings" },
   ];
@@ -112,7 +112,12 @@ const Profile = () => {
                 </Badge>
               </div>
               <p className="text-muted-foreground">{currentUser.email}</p>
-              <Button variant="outline" size="sm" className="mt-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="mt-4"
+                onClick={() => navigate(isGuide ? "/guide-edit-profile" : "/settings")}
+              >
                 Editar Perfil
               </Button>
             </div>
