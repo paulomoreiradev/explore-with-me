@@ -46,6 +46,7 @@ const App = () => (
           <Route path="/guide-profile/:id" element={<GuideProfile />} />
           <Route path="/chat/:guideId" element={<Chat />} />
           <Route path="/guide" element={<GuideDashboard />} />
+          <Route path="/guide-dashboard" element={<GuideDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
