@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Filter, SlidersHorizontal, X } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Filter, SlidersHorizontal, X, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,15 +16,25 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import ExperienceCard from "@/components/ExperienceCard";
 import BottomNav from "@/components/BottomNav";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Explore = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const cityFromUrl = searchParams.get("city") || "";
+  
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(cityFromUrl);
   const [sortBy, setSortBy] = useState("relevance");
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // Sync search query when URL changes
+  useEffect(() => {
+    if (cityFromUrl) {
+      setSearchQuery(cityFromUrl);
+    }
+  }, [cityFromUrl]);
 
   const categories = [
     { id: "all", label: "Todos" },
@@ -187,6 +197,7 @@ const Explore = () => {
     setSearchQuery("");
     setSortBy("relevance");
     setPriceRange([0, 500]);
+    setSearchParams({});
   };
 
   const hasActiveFilters = selectedCategory !== "all" || searchQuery.trim() || priceRange[0] > 0 || priceRange[1] < 500;
@@ -196,7 +207,16 @@ const Explore = () => {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="mb-4 text-2xl font-bold text-primary">Explorar Experiências</h1>
+          <h1 className="mb-4 text-2xl font-bold text-primary">
+            {cityFromUrl ? (
+              <span className="flex items-center gap-2">
+                <MapPin className="h-6 w-6" />
+                Experiências em {cityFromUrl}
+              </span>
+            ) : (
+              "Explorar Experiências"
+            )}
+          </h1>
 
           <div className="flex gap-2">
             <Input 
