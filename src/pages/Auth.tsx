@@ -9,13 +9,59 @@ import { Mail, Lock, User, Plane } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
+// Mock users for demo
+const MOCK_USERS = {
+  traveler: {
+    email: "viajante@demo.com",
+    password: "123456",
+    name: "Maria Viajante",
+    type: "traveler" as const,
+  },
+  guide: {
+    email: "guia@demo.com",
+    password: "123456",
+    name: "João Guia",
+    type: "guide" as const,
+  },
+};
+
 const Auth = () => {
   const [userType, setUserType] = useState<"traveler" | "guide" | "entrepreneur">("traveler");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check for mock users
+    const traveler = MOCK_USERS.traveler;
+    const guide = MOCK_USERS.guide;
+    
+    if (email === traveler.email && password === traveler.password) {
+      localStorage.setItem("currentUser", JSON.stringify(traveler));
+      toast({
+        title: "Login realizado!",
+        description: `Bem-vinda, ${traveler.name}!`,
+      });
+      navigate("/dashboard");
+      return;
+    }
+    
+    if (email === guide.email && password === guide.password) {
+      localStorage.setItem("currentUser", JSON.stringify(guide));
+      toast({
+        title: "Login realizado!",
+        description: `Bem-vindo, ${guide.name}!`,
+      });
+      navigate("/guide-dashboard");
+      return;
+    }
+    
+    // Default login (treat as traveler)
+    const defaultUser = { email, name: "Usuário", type: "traveler" as const };
+    localStorage.setItem("currentUser", JSON.stringify(defaultUser));
     toast({
       title: "Login realizado!",
       description: "Bem-vindo ao Vai Por Mim",
@@ -25,11 +71,22 @@ const Auth = () => {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    const newUser = {
+      email,
+      name: "Novo Usuário",
+      type: userType,
+    };
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
     toast({
       title: "Cadastro realizado!",
       description: "Sua conta foi criada com sucesso",
     });
-    navigate("/dashboard");
+    
+    if (userType === "guide") {
+      navigate("/guide-dashboard");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   return (
@@ -44,6 +101,15 @@ const Auth = () => {
         </CardHeader>
 
         <CardContent>
+          {/* Demo Users Info */}
+          <div className="mb-4 rounded-lg bg-muted/50 p-3 text-sm">
+            <p className="font-semibold text-primary mb-2">Usuários Demo:</p>
+            <div className="space-y-1 text-muted-foreground">
+              <p>🧳 Viajante: viajante@demo.com / 123456</p>
+              <p>🎯 Guia: guia@demo.com / 123456</p>
+            </div>
+          </div>
+
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Entrar</TabsTrigger>
@@ -61,6 +127,8 @@ const Auth = () => {
                       type="email"
                       placeholder="seu@email.com"
                       className="pl-10"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -75,6 +143,8 @@ const Auth = () => {
                       type="password"
                       placeholder="••••••••"
                       className="pl-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -111,6 +181,8 @@ const Auth = () => {
                       type="email"
                       placeholder="seu@email.com"
                       className="pl-10"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -125,6 +197,8 @@ const Auth = () => {
                       type="password"
                       placeholder="••••••••"
                       className="pl-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
